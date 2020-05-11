@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">NotesUdemy</string>
+    <string name="add_note_btn">Добавить заметку</string>
+    <string name="hint_headr">Заголовок</string>
+    <string name="dectription_hint">Описание</string>
+
+    <string-array name="day_of_week">
+        <item>Понедельник</item>
+        <item>Вторник</item>
+        <item>Среда</item>
+        <item>Четверг</item>
+        <item>Пятница</item>
+        <item>Суббота</item>
+        <item>Воскресенье</item>
+    </string-array>
+</resources>
