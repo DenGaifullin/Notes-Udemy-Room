@@ -61,18 +61,17 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
         // Stetho
-        Stetho.InitializerBuilder initializerBuilder = Stetho.newInitializerBuilder(this);
+//        Stetho.InitializerBuilder initializerBuilder = Stetho.newInitializerBuilder(this);
 
         // Enable Chrome DevTools
-        initializerBuilder.enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this));
+//        initializerBuilder.enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this));
 
         // Use the InitializerBuilder to generate an Initializer
-        Stetho.Initializer initializer = initializerBuilder.build();
+//        Stetho.Initializer initializer = initializerBuilder.build();
 
         // Initialize Stetho with the Initializer
-        Stetho.initialize(initializer);
+//        Stetho.initialize(initializer);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -93,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
         String[] args = new String[] {"remove", Integer.toString(position)};
         new DownloadTable().execute(args);
 
-        adapter.notifyDataSetChanged();
     }
 
     private void getData(){
@@ -101,16 +99,14 @@ public class MainActivity extends AppCompatActivity {
         new DownloadTable().execute(args);
     }
 
-    private class DownloadTable extends AsyncTask<String, Void, Void>{
+    private class DownloadTable extends AsyncTask<String, Void, String>{
         @Override
-        protected Void doInBackground(String... strings) {
+        protected String doInBackground(String... strings) {
             NotesDao notesDao = notesDatabase.getNotesDao();
             if(strings != null){
                 if(strings[0].equals("remove")){
                     Note note = adapter.getList() .get( Integer.parseInt( strings[1]));
                     notesDao.delete(note);
-                    adapter.getList().remove(Integer.parseInt( strings[1]));
-                    adapter.notifyDataSetChanged();
                 } else if(strings[0].equals("getData")){
                     List<Note> list = notesDao.getAll();
                     if( list != null){
@@ -118,7 +114,18 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
+            if (strings.length == 2)
+                return strings[1];
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if(s != null) {
+                adapter.getList().remove(Integer.parseInt(s));
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 }
